@@ -3,6 +3,7 @@ class ProtectedEnvironment::DeployAccessLevel < ApplicationRecord
   ALLOWED_ACCESS_LEVELS = [
     Gitlab::Access::MAINTAINER,
     Gitlab::Access::DEVELOPER,
+    Gitlab::Access::REPORTER,
     Gitlab::Access::ADMIN
   ].freeze
 

@@ -91,7 +91,7 @@ describe Projects::ProtectedEnvironmentsController do
     let(:params) do
       {
         deploy_access_levels_attributes: [
-          { id: deploy_access_level.id, access_level: Gitlab::Access::DEVELOPER },
+          { id: deploy_access_level.id, access_level: Gitlab::Access::REPORTER },
           { access_level: maintainer_access }
         ]
       }

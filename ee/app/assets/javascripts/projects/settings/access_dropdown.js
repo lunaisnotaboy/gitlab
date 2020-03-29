@@ -403,7 +403,7 @@ export default class AccessDropdown {
         per_page: 20,
         active: true,
         project_id: gon.current_project_id,
-        push_code: true,
+        read_build: true,
       },
     });
   }

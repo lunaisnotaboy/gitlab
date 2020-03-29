@@ -47,7 +47,7 @@ module ProtectedEnvironments
         end
 
         project.project_authorizations
-          .visible_to_user_and_access_level(user_ids, Gitlab::Access::DEVELOPER)
+          .visible_to_user_and_access_level(user_ids, Gitlab::Access::REPORTER)
           .pluck_user_ids
           .to_set
       end

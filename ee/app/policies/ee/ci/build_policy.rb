@@ -11,9 +11,17 @@ module EE
           prevent :update_build
         end
 
+        condition(:deployable_by_reporter) { deployable_by_reporter? }
+
+        rule { deployable_by_reporter }.policy do
+          enable :update_build
+          enable :update_commit_status
+        end
+
         condition(:is_web_ide_terminal, scope: :subject) do
           @subject.pipeline.webide?
         end
+
 
         rule { is_web_ide_terminal & can?(:create_web_ide_terminal) & (admin | owner_of_job) }.policy do
           enable :read_web_ide_terminal
@@ -44,6 +52,14 @@ module EE
           return true unless build.project.protected_environments_feature_available?
 
           build.project.protected_environment_accessible_to?(build.persisted_environment&.name, user)
+        end
+
+        def deployable_by_reporter?
+          # We need to check if Protected Environments feature is available,
+          # as evaluating `build.expanded_environment_name` is expensive.
+          return true unless build.project.protected_environments_feature_available?
+
+          build.project.protected_environment_enforced?(build.persisted_environment&.name, user)
         end
       end
     end

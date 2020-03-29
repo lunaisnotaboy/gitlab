@@ -74,7 +74,7 @@ describe ProtectedEnvironment::DeployAccessLevel do
     end
 
     describe 'access level' do
-      let(:developer_access) { Gitlab::Access::DEVELOPER }
+      let(:developer_access) { Gitlab::Access::REPORTER }
       let(:deploy_access_level) { create(:protected_environment_deploy_access_level, protected_environment: protected_environment, access_level: developer_access) }
 
       context 'when user is project member above the permitted access level' do

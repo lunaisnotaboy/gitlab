@@ -568,6 +568,12 @@ module EE
     end
     request_cache(:any_path_locks?) { self.id }
 
+    def protected_environment_enforced?(environment_name, user)
+      protected_environment = protected_environment_by_name(environment_name)
+
+      protected_environment && protected_environment.accessible_to?(user)
+    end
+
     def protected_environment_accessible_to?(environment_name, user)
       protected_environment = protected_environment_by_name(environment_name)
 

@@ -12,6 +12,11 @@ module Ci
       end
     end
 
+    condition(:reporter_only) do
+      access = ::Gitlab::UserAccess.new(@user, project: @subject.project)
+      access.cannot_do_action("update_merge_request")
+    end
+
     condition(:owner_of_job) do
       @subject.triggered_by?(@user)
     end
@@ -28,7 +33,7 @@ module Ci
       @subject.has_terminal?
     end
 
-    rule { protected_ref | archived }.policy do
+    rule { can?(:update_build) & (protected_ref | archived) }.policy do
       prevent :update_build
       prevent :update_commit_status
       prevent :erase_build
