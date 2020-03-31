@@ -19,7 +19,6 @@ module EE
       rule { can?(:read_merge_request) }.policy do
         enable :approve_merge_request
       end
-
     end
   end
 end
