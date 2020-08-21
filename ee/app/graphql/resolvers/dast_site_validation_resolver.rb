@@ -2,7 +2,7 @@
 
 module Resolvers
   class DastSiteValidationResolver < BaseResolver
-    alias_method :project, :synchronized_object
+    alias_method :project, :object
 
     type Types::DastSiteValidationType.connection_type, null: true
 

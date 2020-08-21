@@ -5,7 +5,7 @@ module Resolvers
     class EpicsResolver < BaseResolver
       include ::BoardIssueFilterable
 
-      alias_method :board, :synchronized_object
+      alias_method :board, :object
 
       argument :issue_filters, Types::Boards::BoardIssueInputType,
                required: false,

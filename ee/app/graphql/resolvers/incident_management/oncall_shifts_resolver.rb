@@ -3,7 +3,7 @@
 module Resolvers
   module IncidentManagement
     class OncallShiftsResolver < BaseResolver
-      alias_method :rotation, :synchronized_object
+      alias_method :rotation, :object
 
       type Types::IncidentManagement::OncallShiftType.connection_type, null: true
 

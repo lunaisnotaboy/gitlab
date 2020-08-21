@@ -2,7 +2,7 @@
 
 module Resolvers
   class DastSiteProfileResolver < BaseResolver
-    alias_method :project, :synchronized_object
+    alias_method :project, :object
 
     type Types::DastSiteProfileType.connection_type, null: true
 

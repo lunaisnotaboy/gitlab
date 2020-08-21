@@ -3,7 +3,7 @@
 module Resolvers
   module IncidentManagement
     class OncallScheduleResolver < BaseResolver
-      alias_method :project, :synchronized_object
+      alias_method :project, :object
 
       type Types::IncidentManagement::OncallScheduleType.connection_type, null: true
 

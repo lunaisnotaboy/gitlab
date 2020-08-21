@@ -32,8 +32,7 @@ module Types
           description: 'Name of the vulnerability finding.'
 
     field :project, ::Types::ProjectType, null: true,
-          description: 'The project on which the vulnerability finding was found.',
-          authorize: :read_project
+          description: 'The project on which the vulnerability finding was found.'
 
     field :description, GraphQL::STRING_TYPE, null: true,
           description: 'Description of the vulnerability finding.'

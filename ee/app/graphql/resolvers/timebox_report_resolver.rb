@@ -4,7 +4,7 @@ module Resolvers
   class TimeboxReportResolver < BaseResolver
     type Types::TimeboxReportType, null: true
 
-    alias_method :timebox, :synchronized_object
+    alias_method :timebox, :object
 
     def resolve(*args)
       response = TimeboxReportService.new(timebox).execute

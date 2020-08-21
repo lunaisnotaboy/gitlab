@@ -5,6 +5,10 @@ require 'spec_helper'
 RSpec.describe Resolvers::DastSiteProfileResolver do
   include GraphqlHelpers
 
+  before do
+    stub_licensed_features(security_on_demand_scans: true)
+  end
+
   let_it_be(:project) { create(:project) }
   let_it_be(:developer) { create(:user, developer_projects: [project] ) }
   let_it_be(:dast_site_profile1) { create(:dast_site_profile, project: project) }
@@ -26,6 +30,20 @@ RSpec.describe Resolvers::DastSiteProfileResolver do
     subject { sync(dast_site_profiles) }
 
     it { is_expected.to contain_exactly(dast_site_profile1, dast_site_profile2) }
+
+    context 'when the feature is disabled' do
+      before do
+        stub_licensed_features(security_on_demand_scans: false)
+      end
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when the user does not have access' do
+      let(:current_user) { create(:user) }
+
+      it { is_expected.to be_empty }
+    end
   end
 
   private

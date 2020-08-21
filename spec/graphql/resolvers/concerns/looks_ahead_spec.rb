@@ -24,6 +24,11 @@ RSpec.describe LooksAhead do
       def preloads
         { labels: [:labels] }
       end
+
+      # fake auth, no permissions required to do anything but still needs to be declared
+      def self.authorize
+        []
+      end
     end
 
     label = Class.new(GraphQL::Schema::Object) do
