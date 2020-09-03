@@ -72,6 +72,10 @@ module ServicesHelper
     end
   end
 
+  def scoped_overrides_integration_path(integration)
+    overrides_admin_application_settings_integration_path(integration)
+  end
+
   def scoped_test_integration_path(integration)
     if @project.present?
       test_project_service_path(@project, integration)

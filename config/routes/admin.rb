@@ -123,6 +123,8 @@ namespace :admin do
     resources :integrations, only: [:edit, :update] do
       member do
         put :test
+        get :overrides
+        get :custom_overrides
       end
     end
 

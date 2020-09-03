@@ -7,7 +7,7 @@ module IntegrationsActions
     include ServiceParams
 
     before_action :not_found, unless: :integrations_enabled?
-    before_action :integration, only: [:edit, :update, :test]
+    before_action :integration, only: [:edit, :update, :test, :overrides]
   end
 
   def edit
@@ -35,12 +35,16 @@ module IntegrationsActions
     end
   end
 
-  def custom_integration_projects
-    Project.with_custom_integration_compared_to(integration).page(params[:page]).per(20)
+  def custom_overrides
+    render json: Project.with_custom_integration_for(integration).page(params[:page]).per(20).to_json
   end
 
   def test
     render json: {}, status: :ok
+  end
+
+  def overrides
+    render 'shared/integrations/overrides'
   end
 
   private
