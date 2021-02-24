@@ -22,7 +22,7 @@ const defaultProps = {
     operationsAccessLevel: 20,
     pagesAccessLevel: 10,
     analyticsAccessLevel: 20,
-    containerRegistryEnabled: true,
+    containerRegistryAccessLevel: 20,
     lfsEnabled: true,
     emailsDisabled: false,
     packagesEnabled: true,
@@ -87,8 +87,8 @@ describe('Settings Panel', () => {
   const findBuildsAccessLevelInput = () =>
     wrapper.find('[name="project[project_feature_attributes][builds_access_level]"]');
   const findContainerRegistrySettings = () => wrapper.find({ ref: 'container-registry-settings' });
-  const findContainerRegistryEnabledInput = () =>
-    wrapper.find('[name="project[container_registry_enabled]"]');
+  const findContainerRegistryAccessLevelInput = () =>
+    wrapper.find('[name="project[project_feature_attributes][container_registry_access_level]"]');
   const findPackageSettings = () => wrapper.find({ ref: 'package-settings' });
   const findPackagesEnabledInput = () => wrapper.find('[name="project[packages_enabled]"]');
   const findPagesSettings = () => wrapper.find({ ref: 'pages-settings' });
@@ -267,12 +267,15 @@ describe('Settings Panel', () => {
 
     it('should show the container registry public note if the visibility level is public and the registry is available', () => {
       wrapper = mountComponent({
-        currentSettings: { visibilityLevel: visibilityOptions.PUBLIC },
+        currentSettings: {
+          visibilityLevel: visibilityOptions.PUBLIC,
+          containerRegistryAccessLevel: featureAccessLevel.EVERYONE,
+        },
         registryAvailable: true,
       });
 
       expect(findContainerRegistrySettings().text()).toContain(
-        'Note: the container registry is always visible when a project is public',
+        `Note: The container registry is always visible when a project is public and the container registry is set to 'Everyone With Access'`,
       );
     });
 
@@ -293,7 +296,7 @@ describe('Settings Panel', () => {
         registryAvailable: true,
       });
 
-      expect(findContainerRegistryEnabledInput().props('disabled')).toBe(false);
+      expect(findContainerRegistryAccessLevelInput().props('disabledInput')).toBe(false);
     });
 
     it('should disable the container registry input when the repository is disabled', () => {
@@ -302,7 +305,7 @@ describe('Settings Panel', () => {
         registryAvailable: true,
       });
 
-      expect(findContainerRegistryEnabledInput().props('disabled')).toBe(true);
+      expect(findContainerRegistryAccessLevelInput().props('disabledInput')).toBe(true);
     });
   });
 

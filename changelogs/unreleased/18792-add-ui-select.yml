@@ -1,0 +1,5 @@
+---
+title: Allow visibility of Container Registry to be modified in project admin settings
+merge_request: 55079
+author:
+type: added
