@@ -647,7 +647,8 @@ module ProjectsHelper
       operationsAccessLevel: feature.operations_access_level,
       showDefaultAwardEmojis: project.show_default_award_emojis?,
       allowEditingCommitMessages: project.allow_editing_commit_messages?,
-      securityAndComplianceAccessLevel: project.security_and_compliance_access_level
+      securityAndComplianceAccessLevel: project.security_and_compliance_access_level,
+      containerRegistryAccessLevel: feature.container_registry_access_level
     }
   end
 

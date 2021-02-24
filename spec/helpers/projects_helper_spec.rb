@@ -1030,6 +1030,15 @@ RSpec.describe ProjectsHelper do
   end
 
   describe '#project_permissions_settings' do
+    it 'includes project features' do
+      settings = project_permissions_settings(project)
+
+      expect(settings).to include(
+        metricsDashboardAccessLevel: project.project_feature.metrics_dashboard_access_level,
+        containerRegistryAccessLevel: project.project_feature.container_registry_access_level
+      )
+    end
+
     context 'with no project_setting associated' do
       it 'includes a value for edit commit messages' do
         settings = project_permissions_settings(project)

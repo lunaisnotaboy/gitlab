@@ -794,6 +794,36 @@ RSpec.describe ProjectsController do
         end
       end
     end
+
+    context 'with project feature attributes' do
+      using RSpec::Parameterized::TableSyntax
+
+      where(:feature, :initial_value, :update_to) do
+        :metrics_dashboard_access_level  | ProjectFeature::PRIVATE | ProjectFeature::ENABLED
+        :container_registry_access_level | ProjectFeature::ENABLED | ProjectFeature::PRIVATE
+      end
+
+      with_them do
+        it "updates the project_feature" do
+          expect(project.project_feature.public_send(feature)).to eq(initial_value)
+
+          params = {
+            namespace_id: project.namespace,
+            id: project.path,
+            project: {
+              project_feature_attributes: {
+                "#{feature}": update_to
+              }
+            }
+          }
+
+          put :update, params: params
+          project.reload
+
+          expect(project.project_feature.public_send(feature)).to eq(update_to)
+        end
+      end
+    end
   end
 
   describe '#transfer', :enable_admin_mode do
