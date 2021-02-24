@@ -51,7 +51,7 @@ class ProjectPolicy < BasePolicy
 
   desc "Container registry is disabled"
   condition(:container_registry_disabled, scope: :subject) do
-    !project.container_registry_enabled
+    !access_allowed_to?(:container_registry)
   end
 
   desc "Project has an external wiki"

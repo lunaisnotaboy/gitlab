@@ -9,6 +9,8 @@ RSpec.describe ProjectPolicy do
 
   let(:project) { public_project }
 
+  let_it_be(:auditor) { create(:user, :auditor) }
+
   subject { described_class.new(current_user, project) }
 
   before do
@@ -58,7 +60,7 @@ RSpec.describe ProjectPolicy do
     it_behaves_like 'project policies as admin without admin mode'
 
     context 'auditor' do
-      let(:current_user) { create(:user, :auditor) }
+      let(:current_user) { auditor }
 
       before do
         stub_licensed_features(security_dashboard: true, license_scanning: true, threat_monitoring: true)
@@ -90,6 +92,45 @@ RSpec.describe ProjectPolicy do
 
       it_behaves_like 'project private features with read_all_resources ability' do
         let(:user) { current_user }
+      end
+
+      context 'with project feature related policies' do
+        using RSpec::Parameterized::TableSyntax
+
+        project_features = {
+          container_registry_access_level: [:read_container_image],
+          merge_requests_access_level: [:read_merge_request]
+        }
+
+        where(:project_visibility, :access_level, :allowed) do
+          :public   | ProjectFeature::ENABLED  | true
+          :public   | ProjectFeature::PRIVATE  | true
+          :public   | ProjectFeature::DISABLED | false
+          :internal | ProjectFeature::ENABLED  | true
+          :internal | ProjectFeature::PRIVATE  | true
+          :internal | ProjectFeature::DISABLED | false
+          :private  | ProjectFeature::ENABLED  | true
+          :private  | ProjectFeature::PRIVATE  | true
+          :private  | ProjectFeature::DISABLED | false
+        end
+
+        # For each project feature, check that an auditor is always allowed read
+        # permissions unless the feature is disabled.
+        project_features.each do |feature, permissions|
+          with_them do
+            let(:project) { send("#{project_visibility}_project") }
+
+            it 'always allows permissions except when feature disabled' do
+              project.project_feature.update!("#{feature}": access_level)
+
+              if allowed
+                expect_allowed(*permissions)
+              else
+                expect_disallowed(*permissions)
+              end
+            end
+          end
+        end
       end
     end
   end
