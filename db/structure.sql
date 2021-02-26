@@ -22597,8 +22597,6 @@ CREATE UNIQUE INDEX index_issue_links_on_source_id_and_target_id ON issue_links 
 
 CREATE INDEX index_issue_links_on_target_id ON issue_links USING btree (target_id);
 
-CREATE INDEX index_issue_metrics ON issue_metrics USING btree (issue_id);
-
 CREATE INDEX index_issue_metrics_on_issue_id_and_timestamps ON issue_metrics USING btree (issue_id, first_mentioned_in_commit_at, first_associated_with_milestone_at, first_added_to_board_at);
 
 CREATE INDEX index_issue_on_project_id_state_id_and_blocking_issues_count ON issues USING btree (project_id, state_id, blocking_issues_count);
@@ -23742,6 +23740,8 @@ CREATE UNIQUE INDEX index_trending_projects_on_project_id ON trending_projects U
 CREATE INDEX index_u2f_registrations_on_key_handle ON u2f_registrations USING btree (key_handle);
 
 CREATE INDEX index_u2f_registrations_on_user_id ON u2f_registrations USING btree (user_id);
+
+CREATE UNIQUE INDEX index_unique_issue_metrics_issue_id ON issue_metrics USING btree (issue_id);
 
 CREATE INDEX index_uploads_on_checksum ON uploads USING btree (checksum);
 
