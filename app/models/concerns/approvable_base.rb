@@ -24,6 +24,10 @@ module ApprovableBase
         .group(:id)
         .having("COUNT(users.id) = ?", usernames.size)
     end
+
+    scope :not_approved_by_users_with_usernames, -> (*usernames) do
+      MergeRequest.from_union([without_approvals, with_approvals.merge(Approval.with_user).where.not(users: { username: usernames })])
+    end
   end
 
   class_methods do
