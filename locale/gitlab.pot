@@ -19553,6 +19553,9 @@ msgstr ""
 msgid "More Information"
 msgstr ""
 
+msgid "More Information."
+msgstr ""
+
 msgid "More Slack commands"
 msgstr ""
 
@@ -33657,13 +33660,7 @@ msgstr ""
 msgid "WikiHistoricalPage|most recent version"
 msgstr ""
 
-msgid "WikiMarkdownDocs|More examples are in the %{docs_link}"
-msgstr ""
-
-msgid "WikiMarkdownDocs|documentation"
-msgstr ""
-
-msgid "WikiMarkdownTip|To link to a (new) page, simply type %{link_example}"
+msgid "WikiMarkdownTip|To link to a (new) page, simply type %{linkExample}. More examples are in the %{linkStart}documentation%{linkEnd}."
 msgstr ""
 
 msgid "WikiNewPageTip|Tip: You can specify the full path for the new file. We will automatically create any missing directories."
@@ -33681,16 +33678,22 @@ msgstr ""
 msgid "WikiPageConflictMessage|Someone edited the page the same time you did. Please check out %{wikiLinkStart}the page%{wikiLinkEnd} and make sure your changes will not unintentionally remove theirs."
 msgstr ""
 
-msgid "WikiPageCreate|Create %{pageTitle}"
+msgid "WikiPageCreate|Update %{pageTitle}"
 msgstr ""
 
-msgid "WikiPageEdit|Update %{pageTitle}"
+msgid "WikiPageEdit|Create %{pageTitle}"
 msgstr ""
 
 msgid "WikiPage|Write your content or drag files here…"
 msgstr ""
 
 msgid "Wikis"
+msgstr ""
+
+msgid "Wiki|Commit message"
+msgstr ""
+
+msgid "Wiki|Content"
 msgstr ""
 
 msgid "Wiki|Create New Page"
@@ -33703,6 +33706,9 @@ msgid "Wiki|Created date"
 msgstr ""
 
 msgid "Wiki|Edit Page"
+msgstr ""
+
+msgid "Wiki|Format"
 msgstr ""
 
 msgid "Wiki|New page"
