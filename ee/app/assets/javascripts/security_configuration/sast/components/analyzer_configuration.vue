@@ -30,6 +30,9 @@ export default {
     hasVariables() {
       return this.variables.length > 0;
     },
+    checkboxQaSelector() {
+      return `${this.entity.name}_checkbox`;
+    },
   },
   methods: {
     onToggle(enabled) {
@@ -46,7 +49,12 @@ export default {
 
 <template>
   <gl-form-group>
-    <gl-form-checkbox :id="entity.name" :checked="entity.enabled" @input="onToggle">
+    <gl-form-checkbox
+      :id="entity.name"
+      :checked="entity.enabled"
+      :data-qa-selector="checkboxQaSelector"
+      @input="onToggle"
+    >
       <span class="gl-font-weight-bold">{{ entity.label }}</span>
       <span v-if="entity.description" class="gl-text-gray-500">({{ entity.description }})</span>
     </gl-form-checkbox>

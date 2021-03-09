@@ -166,6 +166,7 @@ module QA
           autoload :SecurityDashboard, 'qa/ee/page/project/secure/security_dashboard'
           autoload :VulnerabilityDetails, 'qa/ee/page/project/secure/vulnerability_details'
           autoload :LicenseCompliance, 'qa/ee/page/project/secure/license_compliance'
+          autoload :ConfigurationForm, 'qa/ee/page/project/secure/configuration_form'
         end
 
         module PathLocks

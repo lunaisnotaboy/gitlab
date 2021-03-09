@@ -49,6 +49,7 @@ export default {
       <gl-button
         v-collapse-toggle="collapseId"
         class="gl-flex-shrink-0 gl-align-self-start gl-ml-3"
+        data-qa-selector="expand_button"
         >{{ toggleText }}</gl-button
       >
     </header>

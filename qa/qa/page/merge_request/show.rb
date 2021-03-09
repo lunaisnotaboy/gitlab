@@ -72,6 +72,10 @@ module QA
           element :new_diff_line_link
         end
 
+        view 'app/views/shared/issuable/_form.html.haml' do
+          element :submit_merge_request_button
+        end
+
         view 'app/views/projects/merge_requests/_mr_title.html.haml' do
           element :edit_button
         end
@@ -300,6 +304,10 @@ module QA
           end
 
           raise "Rebase did not appear to be successful" unless success
+        end
+
+        def submit_merge_request
+          click_element(:submit_merge_request_button)
         end
 
         def try_to_merge!

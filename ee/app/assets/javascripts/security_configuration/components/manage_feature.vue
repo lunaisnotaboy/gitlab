@@ -22,6 +22,9 @@ export default {
     canManageProfiles() {
       return this.feature.type === 'dast_profiles';
     },
+    featureTypeEnableButton() {
+      return `${this.feature.type}_enable_button`;
+    },
   },
 };
 </script>
@@ -47,6 +50,7 @@ export default {
     category="primary"
     :href="feature.configuration_path"
     data-testid="enableButton"
+    :data-qa-selector="featureTypeEnableButton"
     >{{ s__('SecurityConfiguration|Enable') }}</gl-button
   >
 </template>

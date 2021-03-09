@@ -64,6 +64,9 @@ export default {
     inputSize() {
       return SCHEMA_TO_PROP_SIZE_MAP[this.size];
     },
+    qaSelectorField() {
+      return `${this.field}_field`;
+    },
   },
   methods: {
     resetToDefaultValue() {
@@ -89,6 +92,7 @@ export default {
       :value="value"
       :disabled="disabled"
       :placeholder="placeholder"
+      :data-qa-selector="qaSelectorField"
       @input="$emit('input', $event)"
     />
 

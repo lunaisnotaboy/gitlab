@@ -208,6 +208,7 @@ export default {
         type="submit"
         variant="success"
         category="primary"
+        data-qa-selector="submit_button"
         >{{ $options.i18n.submitButton }}</gl-button
       >
 

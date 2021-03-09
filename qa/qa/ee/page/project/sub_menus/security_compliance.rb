@@ -41,6 +41,14 @@ module QA
               end
             end
 
+            def click_on_security_configuration_link
+              hover_security_compliance do
+                within_submenu do
+                  click_element(:security_configuration_link)
+                end
+              end
+            end
+
             def hover_security_compliance
               within_sidebar do
                 find_element(:security_dashboard_link).hover
