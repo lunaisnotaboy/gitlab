@@ -172,3 +172,14 @@
     width: 50%;
   }
 }
+
+// https://gitlab.com/gitlab-org/gitlab-ui/-/issues/1254
+.gl-form-select {
+  &.is-invalid {
+    @include gl-inset-border-1-red-500;
+
+    &:focus {
+      @include gl-focus($gl-border-size-1, $red-500, true);
+    }
+  }
+}

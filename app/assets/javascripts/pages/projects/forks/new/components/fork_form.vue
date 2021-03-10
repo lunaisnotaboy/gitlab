@@ -13,12 +13,14 @@ import {
   GlFormRadioGroup,
   GlFormSelect,
 } from '@gitlab/ui';
+// import { BFormInvalidFeedback } from 'bootstrap-vue';
 import { buildApiUrl } from '~/api/api_utils';
 import createFlash from '~/flash';
 import axios from '~/lib/utils/axios_utils';
 import csrf from '~/lib/utils/csrf';
-import { redirectTo } from '~/lib/utils/url_utility';
+// import { redirectTo } from '~/lib/utils/url_utility';
 import { s__ } from '~/locale';
+import validation from '~/vue_shared/directives/validation';
 
 const PRIVATE_VISIBILITY = 'private';
 const INTERNAL_VISIBILITY = 'internal';
@@ -29,6 +31,13 @@ const ALLOWED_VISIBILITY = {
   internal: [INTERNAL_VISIBILITY, PRIVATE_VISIBILITY],
   public: [INTERNAL_VISIBILITY, PRIVATE_VISIBILITY, PUBLIC_VISIBILITY],
 };
+
+const initFormField = ({ value, required = true, skipValidation = false }) => ({
+  value,
+  required,
+  state: skipValidation ? true : null,
+  feedback: null,
+});
 
 export default {
   components: {
@@ -44,6 +53,7 @@ export default {
     GlFormRadio,
     GlFormRadioGroup,
     GlFormSelect,
+    // BFormInvalidFeedback,
   },
   inject: {
     newGroupPath: {
@@ -52,6 +62,9 @@ export default {
     visibilityHelpPath: {
       default: '',
     },
+  },
+  directives: {
+    validation: validation(),
   },
   props: {
     endpoint: {
@@ -84,16 +97,25 @@ export default {
     },
   },
   data() {
+    const form = {
+      state: false,
+      showValidation: false,
+      fields: {
+        namespace: initFormField({ value: null }),
+        name: initFormField({ value: this.projectName }),
+        slug: initFormField({ value: null }),
+        description: initFormField({
+          value: this.projectDescription,
+          required: false,
+          skipValidation: true,
+        }),
+        visibility: initFormField({ value: this.projectVisibility, skipValidation: true }),
+      },
+    };
     return {
+      form,
       isSaving: false,
       namespaces: [],
-      selectedNamespace: {},
-      fork: {
-        name: this.projectName,
-        slug: this.projectPath,
-        description: this.projectDescription,
-        visibility: this.projectVisibility,
-      },
     };
   },
   computed: {
@@ -105,7 +127,7 @@ export default {
     },
     namespaceAllowedVisibility() {
       return (
-        ALLOWED_VISIBILITY[this.selectedNamespace.visibility] ||
+        ALLOWED_VISIBILITY[this.form.fields.namespace.value?.visibility] ||
         ALLOWED_VISIBILITY[PUBLIC_VISIBILITY]
       );
     },
@@ -138,11 +160,12 @@ export default {
     },
   },
   watch: {
-    selectedNamespace(newVal) {
+    // eslint-disable-next-line func-names
+    'form.fields.namespace.value': function (newVal) {
       const { visibility } = newVal;
 
       if (this.projectAllowedVisibility.includes(visibility)) {
-        this.fork.visibility = visibility;
+        this.form.fields.visibility.value = visibility;
       }
     },
   },
@@ -161,28 +184,35 @@ export default {
       );
     },
     async onSubmit() {
+      this.form.showValidation = true;
+
+      if (!this.form.state) {
+        console.log('hi');
+        return;
+      }
+
       this.isSaving = true;
 
       const { projectId } = this;
-      const { name, slug, description, visibility } = this.fork;
-      const { id: namespaceId } = this.selectedNamespace;
+      const { name, slug, description, visibility, namespace } = this.form.fields;
 
       const postParams = {
         id: projectId,
-        name,
-        namespace_id: namespaceId,
-        path: slug,
-        description,
-        visibility,
+        name: name.value,
+        namespace_id: namespace.value.id,
+        path: slug.value,
+        description: description.value,
+        visibility: visibility.value,
       };
 
       const forkProjectPath = `/api/:version/projects/:id/fork`;
       const url = buildApiUrl(forkProjectPath).replace(':id', encodeURIComponent(this.projectId));
 
       try {
-        const { data } = await axios.post(url, postParams);
-        redirectTo(data.web_url);
-        return;
+        console.log(postParams, url);
+        // const { data } = await axios.post(url, postParams);
+        // redirectTo(data.web_url);
+        // return;
       } catch (error) {
         createFlash({ message: error });
       }
@@ -193,17 +223,34 @@ export default {
 </script>
 
 <template>
-  <gl-form method="POST" @submit.prevent="onSubmit">
+  <gl-form novalidate @submit.prevent="onSubmit">
     <input type="hidden" name="authenticity_token" :value="$options.csrf.token" />
 
-    <gl-form-group label="Project name" label-for="fork-name">
-      <gl-form-input id="fork-name" v-model="fork.name" data-testid="fork-name-input" required />
+    <gl-form-group
+      label="Project name"
+      label-for="name"
+      :invalid-feedback="form.fields.name.feedback"
+    >
+      <gl-form-input
+        id="name"
+        name="name"
+        v-model="form.fields.name.value"
+        v-validation:[form.showValidation]
+        data-testid="fork-name-input"
+        :state="form.fields.name.state"
+        required
+      />
     </gl-form-group>
 
     <div class="gl-md-display-flex">
       <div class="gl-flex-basis-half">
-        <gl-form-group label="Project URL" label-for="fork-url" class="gl-md-mr-3">
-          <gl-form-input-group>
+        <gl-form-group
+          label="Project URL"
+          label-for="fork-url"
+          class="gl-md-mr-3"
+          :invalid-feedback="form.fields.namespace.feedback"
+        >
+          <gl-form-input-group class="gl-form-input-group">
             <template #prepend>
               <gl-input-group-text>
                 {{ projectUrl }}
@@ -211,8 +258,11 @@ export default {
             </template>
             <gl-form-select
               id="fork-url"
-              v-model="selectedNamespace"
+              name="namespace"
               data-testid="fork-url-input"
+              v-model="form.fields.namespace.value"
+              :state="form.fields.namespace.state"
+              v-validation:[form.showValidation]
               required
             >
               <template slot="first">
@@ -223,14 +273,25 @@ export default {
               </option>
             </gl-form-select>
           </gl-form-input-group>
+          <!-- <b-form-invalid-feedback class="gl-mt-3" :state="form.fields.namespace.state">
+            {{ s__('ForkProject|Please select a namespace.') }}
+          </b-form-invalid-feedback> -->
         </gl-form-group>
       </div>
       <div class="gl-flex-basis-half">
-        <gl-form-group label="Project slug" label-for="fork-slug" class="gl-md-ml-3">
+        <gl-form-group
+          label="Project slug"
+          label-for="fork-slug"
+          class="gl-md-ml-3"
+          :invalid-feedback="form.fields.slug.feedback"
+        >
           <gl-form-input
             id="fork-slug"
-            v-model="fork.slug"
+            v-model="form.fields.slug.value"
             data-testid="fork-slug-input"
+            name="slug"
+            v-validation:[form.showValidation]
+            :state="form.fields.slug.state"
             required
           />
         </gl-form-group>
@@ -244,24 +305,33 @@ export default {
       </gl-link>
     </p>
 
-    <gl-form-group label="Project description (optional)" label-for="fork-description">
+    <gl-form-group
+      label="Project description (optional)"
+      label-for="fork-description"
+      :invalid-feedback="form.fields.description.feedback"
+    >
       <gl-form-textarea
         id="fork-description"
-        v-model="fork.description"
+        name="description"
+        v-model="form.fields.description.value"
+        :state="form.fields.description.state"
         data-testid="fork-description-textarea"
       />
     </gl-form-group>
 
-    <gl-form-group>
+    <gl-form-group :invalid-feedback="form.fields.visibility.feedback">
       <label>
         {{ s__('ForkProject|Visibility level') }}
         <gl-link :href="visibilityHelpPath" target="_blank">
           <gl-icon name="question-o" />
         </gl-link>
       </label>
+      <!-- :state="form.fields.visibility.state" -->
       <gl-form-radio-group
-        v-model="fork.visibility"
+        v-model="form.fields.visibility.value"
+        v-validation:[form.showValidation]
         data-testid="fork-visibility-radio-group"
+        name="visibility"
         required
       >
         <gl-form-radio
@@ -279,14 +349,15 @@ export default {
         </gl-form-radio>
       </gl-form-radio-group>
     </gl-form-group>
-
+    <!-- :loading="isSaving" -->
     <div class="gl-display-flex gl-justify-content-space-between gl-mt-8">
       <gl-button
         type="submit"
         category="primary"
-        variant="confirm"
+        variant="success"
         data-testid="submit-button"
-        :loading="isSaving"
+        :disabled="false"
+        :loading="false"
       >
         {{ s__('ForkProject|Fork project') }}
       </gl-button>
