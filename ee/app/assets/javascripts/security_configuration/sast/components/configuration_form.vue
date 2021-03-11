@@ -156,6 +156,7 @@ export default {
       v-if="shouldRenderAnalyzersSection"
       class="gl-mb-5"
       data-testid="analyzers-section"
+      data-qa-selector="analyzer_settings_content"
     >
       <template #heading>
         {{ $options.i18n.analyzersHeading }}

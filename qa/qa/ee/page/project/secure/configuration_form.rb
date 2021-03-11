@@ -7,17 +7,18 @@ module QA
         module Secure
           class ConfigurationForm < QA::Page::Base
             include QA::Page::Component::Select2
+            include QA::Page::Settings::Common
 
             view 'ee/app/assets/javascripts/security_configuration/sast/components/configuration_form.vue' do
               element :submit_button
             end
 
             view 'ee/app/assets/javascripts/security_configuration/components/expandable_section.vue' do
-              element :expand_button
+              element :analyzer_settings_content
             end
 
             def click_expand_button
-              click_element :expand_button
+              expand_content :analyzer_settings_content
             end
 
             def click_submit_button

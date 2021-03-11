@@ -99,18 +99,26 @@ module QA
           config_form.click_submit_button
 
           Page::MergeRequest::Show.perform do |merge_request|
-            expect(merge_request).to have_description(merge_request_description)
-            merge_request.click_diffs_tab
-            expect(merge_request).to have_file('.gitlab-ci.yml')
-            test_data_string_fields_array.each do |test_data_string_array|
-              expect(merge_request).to have_content("#{test_data_string_array.first}: #{test_data_string_array[1]}")
+            aggregate_failures "test Merge Request contents" do
+              expect(merge_request).to have_description(merge_request_description)
+              merge_request.click_diffs_tab
+              expect(merge_request).to have_file('.gitlab-ci.yml')
+              test_data_string_fields_array.each do |test_data_string_array|
+                expect(merge_request).to have_content("#{test_data_string_array.first}: #{test_data_string_array[1]}")
+              end
+              test_data_int_fields_array.each do |test_data_int_array|
+                expect(merge_request).to have_content("#{test_data_int_array.first}: '#{test_data_int_array[1]}'")
+              end
+              expect(merge_request).to have_content("stages: - test - #{test_stage_name}")
+              expect(merge_request).to have_content("SAST_EXCLUDED_ANALYZERS: #{test_data_checkbox_exclude_array.join(', ')}")
             end
-            test_data_int_fields_array.each do |test_data_int_array|
-              expect(merge_request).to have_content("#{test_data_int_array.first}: '#{test_data_int_array[1]}'")
-            end
-            expect(merge_request).to have_content("stages: - test - #{test_stage_name}")
-            expect(merge_request).to have_content("SAST_EXCLUDED_ANALYZERS: #{test_data_checkbox_exclude_array.join(', ')}")
-            merge_request.submit_merge_request
+          end
+
+          Page::MergeRequest::New.perform do |new_merge_request|
+            new_merge_request.submit_merge_request
+          end
+
+          Page::MergeRequest::Show.perform do |merge_request|
             merge_request.try_to_merge!
           end
 
@@ -124,8 +132,10 @@ module QA
           Page::Project::Menu.perform(&:click_on_security_configuration_link)
 
           EE::Page::Project::Secure::ConfigurationForm.perform do |config_form|
-            expect(config_form).to have_sast_status('Enabled')
-            expect(config_form).not_to have_sast_status('Not enabled')
+            aggregate_failures "test SAST status is Enabled" do
+              expect(config_form).to have_sast_status('Enabled')
+              expect(config_form).not_to have_sast_status('Not enabled')
+            end
           end
         end
       end
