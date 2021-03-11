@@ -78,7 +78,8 @@ class DatadogService < Service
       {
         type: 'password',
         name: 'api_key',
-        title: 'API key',
+        new_title: _('API key'),
+        title: _('API key'),
         help: "<a href=\"#{api_keys_url}\" target=\"_blank\">API key</a> used for authentication with Datadog",
         required: true
       },
