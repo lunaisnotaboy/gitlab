@@ -8,9 +8,10 @@ module MergeRequests
   class ByApproversFinder
     attr_reader :usernames, :ids
 
-    def initialize(usernames, ids)
+    def initialize(usernames, ids, negated: false)
       @usernames = usernames.to_a.map(&:to_s)
       @ids = ids
+      @negated = negated
     end
 
     def execute(items)
@@ -70,10 +71,17 @@ module MergeRequests
     end
 
     def find_approvers_by_query(items, field, values)
-      items
-        .where(users: { field => values })
-        .group('merge_requests.id')
-        .having("COUNT(users.id) = ?", values.size)
+      if @negated
+        items
+          .where.not(users: { field => values })
+          .group('merge_requests.id')
+          .having("COUNT(users.id) = ?", values.size)
+      else
+        items
+          .where(users: { field => values })
+          .group('merge_requests.id')
+          .having("COUNT(users.id) = ?", values.size)
+      end
     end
 
     def with_users_filtered_by_criteria(items)
