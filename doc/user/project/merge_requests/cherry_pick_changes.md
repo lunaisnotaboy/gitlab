@@ -60,6 +60,43 @@ mainline:
 git cherry-pick -m 2 7a39eb0
 ```
 
+### Cherry-picking into a project
+
+> - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/21268) in GitLab 13.10.
+> - It's [deployed behind a feature flag](../../feature_flags.md), disabled by default.
+> - It's disabled on GitLab.com.
+> - It's not recommended for production use.
+> - To use it in GitLab self-managed instances, ask a GitLab administrator to [enable it](#enable-or-disable-cherry-picking-into-a-project). **(FREE SELF)**
+
+WARNING:
+This feature might not be available to you. Check the **version history** note above for details.
+
+To cherry-pick into a project, click on the Cherry-pick button from the commit details page to open the Cherry-pick modal. 
+On the Cherry-pick modal, select the project and branch to pick into.
+
+![Cherry-pick commit](img/cherry_pick_into_project_v13_10.png)
+
+Once the project and branch is selected, click on the Cherry-pick button to submit the cherry-pick.
+
+### Enable or disable cherry-picking into a project **(FREE SELF)**
+
+Cherry-picking into a project is under development and not ready for production use. It is
+deployed behind a feature flag that is **disabled by default**.
+[GitLab administrators with access to the GitLab Rails console](../../../administration/feature_flags.md)
+can enable it.
+
+To enable it:
+
+```ruby
+Feature.enable(:pick_into_project)
+```
+
+To disable it:
+
+```ruby
+Feature.disable(:pick_into_project)
+```
+
 <!-- ## Troubleshooting
 
 Include any troubleshooting steps that you can foresee. If you know beforehand what issues
