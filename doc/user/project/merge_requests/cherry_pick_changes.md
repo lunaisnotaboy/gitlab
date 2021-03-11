@@ -9,7 +9,7 @@ type: reference, concepts
 
 GitLab implements Git's powerful feature to
 [cherry-pick any commit](https://git-scm.com/docs/git-cherry-pick "Git cherry-pick documentation")
-with introducing a **Cherry-pick** button in merge requests and commit details.
+with a **Cherry-pick** button in merge requests and commit details.
 
 ## Cherry-picking a merge request
 
@@ -60,7 +60,7 @@ mainline:
 git cherry-pick -m 2 7a39eb0
 ```
 
-### Cherry-picking into a project
+### Cherry-pick into a project
 
 > - [Introduced](https://gitlab.com/gitlab-org/gitlab/-/issues/21268) in GitLab 13.10.
 > - It's [deployed behind a feature flag](../../feature_flags.md), disabled by default.
@@ -71,12 +71,15 @@ git cherry-pick -m 2 7a39eb0
 WARNING:
 This feature might not be available to you. Check the **version history** note above for details.
 
-To cherry-pick into a project, click on the Cherry-pick button from the commit details page to open the Cherry-pick modal. 
-On the Cherry-pick modal, select the project and branch to pick into.
+You can use the GitLab UI to cherry-pick merge requests into a project, even if the
+merge request is from a fork:
 
-![Cherry-pick commit](img/cherry_pick_into_project_v13_10.png)
-
-Once the project and branch is selected, click on the Cherry-pick button to submit the cherry-pick.
+1. In the merge request's secondary menu, click **Commits** to display the commit details page.
+1. Click **Cherry-pick** to show the cherry-pick modal.
+1. In **Pick into project** and **Pick into branch**, select the destination project and branch:
+   ![Cherry-pick commit](img/cherry_pick_into_project_v13_10.png)
+1. (Optional) Select **Start a new merge request** if you're ready to create a merge request.
+1. Click **Cherry-pick**.
 
 ### Enable or disable cherry-picking into a project **(FREE SELF)**
 
