@@ -8,6 +8,7 @@ describe('DynamicField', () => {
   const defaultProps = {
     help: 'The URL of the project',
     name: 'project_url',
+    newTitle: 'project URL',
     placeholder: 'https://jira.example.com',
     title: 'Project URL',
     type: 'text',
@@ -200,7 +201,7 @@ describe('DynamicField', () => {
             value: 'true',
           });
 
-          expect(findGlFormGroup().find('label').text()).toBe(`Enter new ${defaultProps.title}`);
+          expect(findGlFormGroup().find('label').text()).toBe(`Enter new ${defaultProps.newTitle}`);
         });
       });
     });
