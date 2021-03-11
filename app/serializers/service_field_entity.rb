@@ -3,7 +3,7 @@
 class ServiceFieldEntity < Grape::Entity
   include RequestAwareEntity
 
-  expose :type, :name, :title, :placeholder, :required, :choices, :help
+  expose :type, :name, :new_title, :title, :placeholder, :required, :choices, :help
 
   expose :value do |field|
     # field[:name] is not user input and so can assume is safe

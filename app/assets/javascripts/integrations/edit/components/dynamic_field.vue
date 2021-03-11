@@ -30,6 +30,11 @@ export default {
       type: String,
       required: true,
     },
+    newTitle: {
+      type: String,
+      required: false,
+      default: null,
+    },
     placeholder: {
       type: String,
       required: false,
@@ -80,13 +85,21 @@ export default {
     label() {
       if (this.isNonEmptyPassword) {
         return sprintf(__('Enter new %{field_title}'), {
-          field_title: this.humanizedTitle,
+          field_title: this.newTitle || this.name,
         });
       }
       return this.humanizedTitle;
     },
     humanizedTitle() {
       return this.title || capitalize(lowerCase(this.name));
+    },
+    description() {
+      if (this.isNonEmptyPassword) {
+        return sprintf(__('Leave blank to use your current %{field}'), {
+          field: this.newTitle || this.name,
+        });
+      }
+      return this.help;
     },
     passwordRequired() {
       return isEmpty(this.value) && this.required;
@@ -142,7 +155,7 @@ export default {
     :state="valid"
   >
     <template #description>
-      <span v-html="help"></span>
+      <span v-html="description"></span>
     </template>
 
     <template v-if="isCheckbox">
