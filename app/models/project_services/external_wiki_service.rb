@@ -22,6 +22,7 @@ class ExternalWikiService < Service
       {
         type: 'text',
         name: 'external_wiki_url',
+        title: s_('ExternalWikiService|External Wiki URL'),
         placeholder: s_('ExternalWikiService|The URL of the external Wiki'),
         required: true
       }
