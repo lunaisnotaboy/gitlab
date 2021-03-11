@@ -132,6 +132,18 @@ RSpec.describe Gitlab::Diff::Highlight do
         end
       end
 
+      context 'when feature flag is disabled' do
+        it 'returns the same result' do
+          with_feature_flag = described_class.new(diff_file, repository: project.repository).highlight
+
+          stub_feature_flags(use_marker_ranges: false)
+
+          without_feature_flag = described_class.new(diff_file, repository: project.repository).highlight
+
+          expect(with_feature_flag.map(&:rich_text)).to eq(without_feature_flag.map(&:rich_text))
+        end
+      end
+
       context 'when no inline diffs' do
         it_behaves_like 'without inline diffs'
       end
