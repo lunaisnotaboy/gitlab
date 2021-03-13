@@ -23,7 +23,7 @@ class ContainerRepository < ApplicationRecord
   scope :for_group_and_its_subgroups, ->(group) do
     project_scope = Project
       .for_group_and_its_subgroups(group)
-      .with_container_registry
+      .with_feature_enabled(:container_registry)
       .select(:id)
 
     joins("INNER JOIN (#{project_scope.to_sql}) projects on projects.id=container_repositories.project_id")

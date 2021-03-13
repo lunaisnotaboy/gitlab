@@ -634,6 +634,8 @@ RSpec.describe Project, factory_default: :keep do
     it { is_expected.to delegate_method(:root_ancestor).to(:namespace).with_arguments(allow_nil: true) }
     it { is_expected.to delegate_method(:last_pipeline).to(:commit).with_arguments(allow_nil: true) }
     it { is_expected.to delegate_method(:allow_editing_commit_messages?).to(:project_setting) }
+    it { is_expected.to delegate_method(:container_registry_enabled?).to(:project_feature) }
+    it { is_expected.to delegate_method(:container_registry_access_level).to(:project_feature) }
   end
 
   describe 'reference methods' do
@@ -2210,17 +2212,20 @@ RSpec.describe Project, factory_default: :keep do
       project.update_column(:container_registry_enabled, true)
       project.project_feature.update_column(:container_registry_access_level, ProjectFeature::DISABLED)
 
-      expect(project.container_registry_enabled).to eq(true)
+      expect(project.read_attribute(:container_registry_enabled)).to eq(true)
+      expect(project.container_registry_enabled).to eq(false)
       expect(project.project_feature.container_registry_access_level).to eq(ProjectFeature::DISABLED)
 
       project.update!(container_registry_enabled: false)
 
       expect(project.container_registry_enabled).to eq(false)
+      expect(project.read_attribute(:container_registry_enabled)).to eq(false)
       expect(project.project_feature.container_registry_access_level).to eq(ProjectFeature::DISABLED)
 
       project.update!(container_registry_enabled: true)
 
       expect(project.container_registry_enabled).to eq(true)
+      expect(project.read_attribute(:container_registry_enabled)).to eq(true)
       expect(project.project_feature.container_registry_access_level).to eq(ProjectFeature::ENABLED)
     end
 
@@ -2228,15 +2233,31 @@ RSpec.describe Project, factory_default: :keep do
       project.update_column(:container_registry_enabled, true)
       project.project_feature.update_column(:container_registry_access_level, ProjectFeature::DISABLED)
 
-      expect(project.container_registry_enabled).to eq(true)
+      expect(project.container_registry_enabled).to eq(false)
+      expect(project.read_attribute(:container_registry_enabled)).to eq(true)
       expect(project.project_feature.container_registry_access_level).to eq(ProjectFeature::DISABLED)
 
       allow(project).to receive(:valid?).and_return(false)
 
       expect { project.update!(container_registry_enabled: false) }.to raise_error(ActiveRecord::RecordInvalid)
 
-      expect(project.reload.container_registry_enabled).to eq(true)
+      expect(project.reload.container_registry_enabled).to eq(false)
+      expect(project.read_attribute(:container_registry_enabled)).to eq(true)
       expect(project.project_feature.reload.container_registry_access_level).to eq(ProjectFeature::DISABLED)
+    end
+  end
+
+  describe '#container_registry_enabled' do
+    let_it_be_with_reload(:project) { create(:project) }
+
+    it 'delegates to project_feature', :aggregate_failures do
+      # Simulate an existing project that has container_registry enabled
+      project.update_column(:container_registry_enabled, true)
+      project.project_feature.update_column(:container_registry_access_level, ProjectFeature::DISABLED)
+
+      expect(project.read_attribute(:container_registry_enabled)).to eq(true)
+      expect(project.project_feature.container_registry_access_level).to eq(ProjectFeature::DISABLED)
+      expect(project.container_registry_enabled).to eq(false)
     end
   end
 

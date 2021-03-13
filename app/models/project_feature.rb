@@ -95,7 +95,7 @@ class ProjectFeature < ApplicationRecord
 
   def set_container_registry_access_level
     self.container_registry_access_level =
-      if project&.container_registry_enabled
+      if project&.read_attribute(:container_registry_enabled)
         ENABLED
       else
         DISABLED
