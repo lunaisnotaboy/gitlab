@@ -1,0 +1,6 @@
+---
+title: Cleanup background migration to copy container_registry_enabled to project_features
+  table
+merge_request: 56626
+author:
+type: other
