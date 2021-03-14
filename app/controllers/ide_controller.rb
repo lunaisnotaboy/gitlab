@@ -27,10 +27,16 @@ class IdeController < ApplicationController
     @branch = params[:branch]
     @path = params[:path]
     @merge_request = params[:merge_request_id]
+    @fork_info = fork_info(project, @branch)
+  end
 
-    unless can?(current_user, :push_code, project)
-      @forked_project = ForkProjectsFinder.new(project, current_user: current_user).execute.first
-    end
+  def fork_info(project, branch)
+    return if can?(current_user, :push_code, project)
+
+    existing_fork = current_user.fork_of(project)
+
+    return { ide_path: helpers.ide_edit_path(existing_fork, branch, '') } if existing_fork
+    return { fork_path: helpers.ide_fork_and_edit_path(project, branch, '') } if can?(current_user, :fork_project, project)
   end
 
   def project

@@ -6,15 +6,20 @@ import {
 } from '~/ide/constants';
 import {
   MSG_CANNOT_PUSH_CODE,
-  MSG_CANNOT_PUSH_CODE_SHORT,
+  MSG_CANNOT_PUSH_CODE_GO_TO_FORK,
+  MSG_CANNOT_PUSH_CODE_SHOULD_FORK,
   MSG_CANNOT_PUSH_UNSIGNED,
   MSG_CANNOT_PUSH_UNSIGNED_SHORT,
+  MSG_FORK,
+  MSG_GO_TO_FORK,
 } from '~/ide/messages';
 import { createStore } from '~/ide/stores';
 import * as getters from '~/ide/stores/getters';
 import { file } from '../helpers';
 
 const TEST_PROJECT_ID = 'test_project';
+const TEST_IDE_PATH = '/test/ide/path';
+const TEST_FORK_PATH = '/test/fork/path';
 
 describe('IDE store getters', () => {
   let localState;
@@ -433,27 +438,63 @@ describe('IDE store getters', () => {
   });
 
   describe('canPushCodeStatus', () => {
-    it.each`
-      pushCode | rejectUnsignedCommits | expected
-      ${true}  | ${false}              | ${{ isAllowed: true, message: '', messageShort: '' }}
-      ${false} | ${false}              | ${{ isAllowed: false, message: MSG_CANNOT_PUSH_CODE, messageShort: MSG_CANNOT_PUSH_CODE_SHORT }}
-      ${false} | ${true}               | ${{ isAllowed: false, message: MSG_CANNOT_PUSH_UNSIGNED, messageShort: MSG_CANNOT_PUSH_UNSIGNED_SHORT }}
-    `(
-      'with pushCode="$pushCode" and rejectUnsignedCommits="$rejectUnsignedCommits"',
-      ({ pushCode, rejectUnsignedCommits, expected }) => {
-        localState.projects[TEST_PROJECT_ID] = {
-          pushRules: {
-            [PUSH_RULE_REJECT_UNSIGNED_COMMITS]: rejectUnsignedCommits,
-          },
-          userPermissions: {
-            [PERMISSION_PUSH_CODE]: pushCode,
-          },
-        };
-        localState.currentProjectId = TEST_PROJECT_ID;
+    it.each([
+      [
+        { pushCode: true, rejectUnsignedCommits: false },
+        { isAllowed: true, message: '', messageShort: '' },
+      ],
+      [
+        { pushCode: false, rejectUnsignedCommits: false },
+        { isAllowed: false, message: MSG_CANNOT_PUSH_CODE, messageShort: MSG_CANNOT_PUSH_CODE },
+      ],
+      [
+        {
+          pushCode: false,
+          rejectUnsignedCommits: false,
+          forkInfo: { ide_path: TEST_IDE_PATH },
+        },
+        {
+          isAllowed: false,
+          message: MSG_CANNOT_PUSH_CODE_GO_TO_FORK,
+          messageShort: MSG_CANNOT_PUSH_CODE,
+          action: { href: TEST_IDE_PATH, text: MSG_GO_TO_FORK },
+        },
+      ],
+      [
+        {
+          pushCode: false,
+          rejectUnsignedCommits: false,
+          forkInfo: { fork_path: TEST_FORK_PATH },
+        },
+        {
+          isAllowed: false,
+          message: MSG_CANNOT_PUSH_CODE_SHOULD_FORK,
+          messageShort: MSG_CANNOT_PUSH_CODE,
+          action: { href: TEST_FORK_PATH, text: MSG_FORK, isForm: true },
+        },
+      ],
+      [
+        { pushCode: false, rejectUnsignedCommits: true },
+        {
+          isAllowed: false,
+          message: MSG_CANNOT_PUSH_UNSIGNED,
+          messageShort: MSG_CANNOT_PUSH_UNSIGNED_SHORT,
+        },
+      ],
+    ])('with %j', ({ pushCode, rejectUnsignedCommits, forkInfo = {} }, expected) => {
+      localState.links = { forkInfo };
+      localState.projects[TEST_PROJECT_ID] = {
+        pushRules: {
+          [PUSH_RULE_REJECT_UNSIGNED_COMMITS]: rejectUnsignedCommits,
+        },
+        userPermissions: {
+          [PERMISSION_PUSH_CODE]: pushCode,
+        },
+      };
+      localState.currentProjectId = TEST_PROJECT_ID;
 
-        expect(localStore.getters.canPushCodeStatus).toEqual(expected);
-      },
-    );
+      expect(localStore.getters.canPushCodeStatus).toEqual(expected);
+    });
   });
 
   describe('canPushCode', () => {
