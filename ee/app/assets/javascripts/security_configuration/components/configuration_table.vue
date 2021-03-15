@@ -41,9 +41,6 @@ export default {
         featureName: item.name,
       });
     },
-    statusQaSelector(item) {
-      return `${item.type}_status`;
-    },
   },
   fields: [
     {
@@ -91,7 +88,7 @@ export default {
         :feature="item"
         :gitlab-ci-present="gitlabCiPresent"
         :gitlab-ci-history-path="gitlabCiHistoryPath"
-        :data-qa-selector="statusQaSelector(item)"
+        :data-qa-selector="`${item.type}_status`"
       />
     </template>
 
