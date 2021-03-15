@@ -69,7 +69,7 @@ module Types
     attr_reader :feature_flag
 
     def field_authorized?(object, ctx)
-      authorization.none? || authorization.ok?(object, ctx[:current_user])
+      authorization.ok?(object, ctx[:current_user])
     end
 
     # Historically our resolvers have used declarative permission checks only
