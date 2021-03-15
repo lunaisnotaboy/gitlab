@@ -2956,7 +2956,7 @@ RSpec.describe Ci::Build do
 
       context 'and is disabled for project' do
         before do
-          project.update!(container_registry_enabled: false)
+          project.project_feature.update!(container_registry_access_level: ProjectFeature::DISABLED)
         end
 
         it { is_expected.to include(ci_registry) }
@@ -2965,7 +2965,7 @@ RSpec.describe Ci::Build do
 
       context 'and is enabled for project' do
         before do
-          project.update!(container_registry_enabled: true)
+          project.project_feature.update!(container_registry_access_level: ProjectFeature::ENABLED)
         end
 
         it { is_expected.to include(ci_registry) }

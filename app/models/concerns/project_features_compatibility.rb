@@ -90,6 +90,13 @@ module ProjectFeaturesCompatibility
     write_feature_attribute_string(:container_registry_access_level, value)
   end
 
+  # TODO: Remove this when we remove the projects.container_registry_enabled column.
+  def container_registry_enabled=(value)
+    write_feature_attribute_boolean(:container_registry_access_level, value)
+
+    super
+  end
+
   private
 
   def write_feature_attribute_boolean(field, value)

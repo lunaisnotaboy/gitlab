@@ -1112,6 +1112,18 @@ RSpec.describe API::Projects do
       expect(response).to have_gitlab_http_status(:created)
     end
 
+    it 'sets container_registry_access_level' do
+      project = attributes_for(:project).tap do |attributes|
+        attributes[:container_registry_access_level] = 'private'
+      end
+
+      post api('/projects', user), params: project
+
+      expect(response).to have_gitlab_http_status(:created)
+
+      expect(Project.last.container_registry_access_level).to eq(ProjectFeature::PRIVATE)
+    end
+
     context 'when a visibility level is restricted' do
       let(:project_param) { attributes_for(:project, visibility: 'public') }
 
@@ -1718,6 +1730,7 @@ RSpec.describe API::Projects do
         expect(json_response['jobs_enabled']).to be_present
         expect(json_response['snippets_enabled']).to be_present
         expect(json_response['container_registry_enabled']).to be_present
+        expect(json_response['container_registry_access_level']).to be_present
         expect(json_response['created_at']).to be_present
         expect(json_response['last_activity_at']).to be_present
         expect(json_response['shared_runners_enabled']).to be_present
@@ -1808,6 +1821,7 @@ RSpec.describe API::Projects do
         expect(json_response['resolve_outdated_diff_discussions']).to eq(project.resolve_outdated_diff_discussions)
         expect(json_response['remove_source_branch_after_merge']).to be_truthy
         expect(json_response['container_registry_enabled']).to be_present
+        expect(json_response['container_registry_access_level']).to be_present
         expect(json_response['created_at']).to be_present
         expect(json_response['last_activity_at']).to be_present
         expect(json_response['shared_runners_enabled']).to be_present

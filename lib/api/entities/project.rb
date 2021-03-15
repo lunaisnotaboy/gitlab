@@ -44,6 +44,7 @@ module API
       expose :owner, using: Entities::UserBasic, unless: ->(project, options) { project.group }
       expose :resolve_outdated_diff_discussions
       expose :container_registry_enabled
+      expose :container_registry_access_level
       expose :container_expiration_policy, using: Entities::ContainerExpirationPolicy,
         if: -> (project, _) { project.container_expiration_policy }
 
