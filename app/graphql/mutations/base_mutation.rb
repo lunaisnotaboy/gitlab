@@ -50,10 +50,9 @@ module Mutations
       context[:current_user].present? && !context[:current_user].blocked?
     end
 
-    def authorized_resource?(object)
-      ::Gitlab::Graphql::Authorize::ObjectAuthorization
-        .new(self.class.authorize)
-        .ok?(object, current_user)
+    # See: AuthorizeResource#authorized_resource?
+    def self.authorization
+      @authorization ||= ::Gitlab::Graphql::Authorize::ObjectAuthorization.new(authorize)
     end
   end
 end
