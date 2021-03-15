@@ -207,7 +207,7 @@ RSpec.describe 'DeclarativePolicy authorization in GraphQL ' do
       end
     end
 
-    context 'the resolver authorizes the object' do
+    context 'when the resolver authorizes the object' do
       let(:permission_object_one) { be_nil }
       let(:permission_object_two) { be_nil }
       let(:resolver) do
@@ -221,7 +221,7 @@ RSpec.describe 'DeclarativePolicy authorization in GraphQL ' do
       include_examples 'authorization with a collection of permissions'
     end
 
-    context 'when the resolver does not authorize the object' do
+    context 'when the resolver does not authorize the object, but instead calls authorized_find!' do
       let(:permission_object_one) { test_object }
       let(:permission_object_two) { be_nil }
       let(:resolver) do
@@ -233,7 +233,7 @@ RSpec.describe 'DeclarativePolicy authorization in GraphQL ' do
       include_examples 'authorization with a collection of permissions'
     end
 
-    context 'when the resolver does not authorize the object, and does not list any permissions' do
+    context 'when the resolver calls authorized_find!, but does not list any permissions' do
       let(:permission_object_two) { be_nil }
       let(:resolver) do
         resolver = new_resolver(test_object, method: :find_object)
@@ -243,7 +243,8 @@ RSpec.describe 'DeclarativePolicy authorization in GraphQL ' do
       it 'raises a configuration error' do
         permit_on(permission_object_two, permission_collection.second)
 
-        expect { execute_query(query_type) }.to raise_error(::Gitlab::Graphql::Authorize::AuthorizeResource::ConfigurationError)
+        expect { execute_query(query_type) }
+          .to raise_error(::Gitlab::Graphql::Authorize::AuthorizeResource::ConfigurationError)
       end
     end
   end
