@@ -7,14 +7,15 @@ module Gitlab
         extend ActiveSupport::Concern
         ConfigurationError = Class.new(StandardError)
 
-        RESOURCE_ACCESS_ERROR = "The resource that you are attempting to access does not exist or you don't have permission to perform this action"
+        RESOURCE_ACCESS_ERROR = "The resource that you are attempting to access does " \
+          "not exist or you don't have permission to perform this action"
 
         class_methods do
           def required_permissions
             # If the `#authorize` call is used on multiple classes, we add the
             # permissions specified on a subclass, to the ones that were specified
             # on its superclass.
-            @required_permissions ||= if self.respond_to?(:superclass) && superclass.respond_to?(:required_permissions)
+            @required_permissions ||= if respond_to?(:superclass) && superclass.respond_to?(:required_permissions)
                                         superclass.required_permissions.dup
                                       else
                                         []
@@ -58,9 +59,7 @@ module Gitlab
         def authorized_resource?(object)
           # Sanity check. We don't want to accidentally allow a developer to authorize
           # without first adding permissions to authorize against
-          if self.class.authorization.none?
-            raise ConfigurationError, "#{self.class.name} has no authorizations"
-          end
+          raise ConfigurationError, "#{self.class.name} has no authorizations" if self.class.authorization.none?
 
           self.class.authorization.ok?(object, current_user)
         end
