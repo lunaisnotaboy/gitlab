@@ -40,6 +40,9 @@ module Types
     # TODO: https://gitlab.com/gitlab-org/gitlab/-/issues/300922
     #       (separate out authorize into permissions on the object, and on the
     #       resolved values)
+    # We do not support argument authorization in our schema. If/when we do,
+    # we should call `super` here, to apply argument authorization checks.
+    # See: https://gitlab.com/gitlab-org/gitlab/-/issues/324647
     def authorized?(object, args, ctx)
       field_authorized?(object, ctx) && resolver_authorized?(object, ctx)
     end
