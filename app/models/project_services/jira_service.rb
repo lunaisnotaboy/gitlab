@@ -93,6 +93,17 @@ class JiraService < IssueTrackerService
       use_cookies: true,
       additional_cookies: ['OBBasicAuth=fromDialog'],
       use_ssl: url.scheme == 'https'
+    }.merge(proxy_options)
+  end
+
+  def proxy_options
+    return {} unless proxy_address
+
+    {
+      proxy_address: proxy_address.strip,
+      proxy_port: proxy_port&.strip,
+      proxy_username: proxy_username&.strip,
+      proxy_password: proxy_password
     }
   end
 

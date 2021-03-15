@@ -75,6 +75,40 @@ RSpec.describe JiraService do
         expect(service.options[:context_path]).to eq('/api_path')
       end
     end
+
+    context 'with proxy options' do
+      before do
+        options.merge!(
+          proxy_address: 'http://proxy.com',
+          proxy_port: '80',
+          proxy_username: 'proxy_user',
+          proxy_password: 'proxy_pass'
+        )
+      end
+
+      it 'sets the proxy settings' do
+        expect(service.options[:proxy_address]).to eq('http://proxy.com')
+        expect(service.options[:proxy_port]).to eq('80')
+        expect(service.options[:proxy_username]).to eq('proxy_user')
+        expect(service.options[:proxy_password]).to eq('proxy_pass')
+      end
+
+      context 'with trailing whitespaces' do
+        before do
+          options.merge!(
+            proxy_address: 'http://proxy.com ',
+            proxy_port: '80 ',
+            proxy_username: 'proxy_user '
+          )
+        end
+
+        it 'sets the proxy settings without trailing whitespaces' do
+          expect(service.options[:proxy_address]).to eq('http://proxy.com')
+          expect(service.options[:proxy_port]).to eq('80')
+          expect(service.options[:proxy_username]).to eq('proxy_user')
+        end
+      end
+    end
   end
 
   describe '#fields' do

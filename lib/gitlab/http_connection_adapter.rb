@@ -21,7 +21,7 @@ module Gitlab
         proxy_uri_with_port = uri_with_port(options[:http_proxyaddr], options[:http_proxyport])
         proxy_uri_validated = validate_url!(proxy_uri_with_port).first
 
-        @options[:http_proxyaddr] = proxy_uri_validated.omit(:port).to_s
+        @options[:http_proxyaddr] = "#{proxy_uri_validated.host}#{proxy_uri_validated.path}"
         @options[:http_proxyport] = proxy_uri_validated.port
       end
 

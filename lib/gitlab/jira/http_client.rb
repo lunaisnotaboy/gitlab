@@ -34,7 +34,7 @@ module Gitlab
         request_params[:headers][:Cookie] = get_cookies if options[:use_cookies]
         request_params[:timeout] = options[:read_timeout] if options[:read_timeout]
         request_params[:base_uri] = uri.to_s
-        request_params.merge!(auth_params)
+        request_params.merge!(auth_params, proxy_params)
 
         result = Gitlab::HTTP.public_send(http_method, path, **request_params) # rubocop:disable GitlabSecurity/PublicSend
         @authenticated = result.response.is_a?(Net::HTTPOK)
@@ -53,6 +53,17 @@ module Gitlab
             username: @options[:username],
             password: @options[:password]
           }
+        }
+      end
+
+      def proxy_params
+        return {} unless options[:proxy_address]
+
+        {
+          http_proxyaddr: options[:proxy_address],
+          http_proxyport: options[:proxy_port],
+          http_proxyuser: options[:proxy_username],
+          http_proxypass: options[:proxy_password]
         }
       end
 

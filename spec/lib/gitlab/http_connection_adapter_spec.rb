@@ -129,7 +129,7 @@ RSpec.describe Gitlab::HTTPConnectionAdapter do
       let(:options) do
         {
           http_proxyaddr: 'https://proxy.org',
-          http_proxyport: 1557,
+          http_proxyport: '1557',
           http_proxyuser: 'user',
           http_proxypass: 'pass'
         }
@@ -140,7 +140,7 @@ RSpec.describe Gitlab::HTTPConnectionAdapter do
       end
 
       it 'sets up the proxy settings' do
-        expect(connection.proxy_address).to eq('https://166.84.12.54')
+        expect(connection.proxy_address).to eq('166.84.12.54')
         expect(connection.proxy_port).to eq(1557)
         expect(connection.proxy_user).to eq('user')
         expect(connection.proxy_pass).to eq('pass')
@@ -152,7 +152,7 @@ RSpec.describe Gitlab::HTTPConnectionAdapter do
         end
 
         it 'sets up the proxy settings' do
-          expect(connection.proxy_address).to eq('https://166.84.12.54/path')
+          expect(connection.proxy_address).to eq('166.84.12.54/path')
           expect(connection.proxy_port).to eq(1557)
         end
       end
@@ -163,7 +163,7 @@ RSpec.describe Gitlab::HTTPConnectionAdapter do
         end
 
         it 'sets up the proxy settings' do
-          expect(connection.proxy_address).to eq('https://166.84.12.54')
+          expect(connection.proxy_address).to eq('166.84.12.54')
           expect(connection.proxy_port).to eq(1557)
         end
 
@@ -173,7 +173,7 @@ RSpec.describe Gitlab::HTTPConnectionAdapter do
           end
 
           it 'sets up the proxy settings' do
-            expect(connection.proxy_address).to eq('https://166.84.12.54')
+            expect(connection.proxy_address).to eq('166.84.12.54')
             expect(connection.proxy_port).to eq(1422)
           end
         end
@@ -197,7 +197,7 @@ RSpec.describe Gitlab::HTTPConnectionAdapter do
           end
 
           it 'sets up the connection' do
-            expect(connection.proxy_address).to eq('http://172.16.0.0/12')
+            expect(connection.proxy_address).to eq('172.16.0.0/12')
             expect(connection.proxy_port).to eq(1557)
           end
         end
@@ -221,7 +221,7 @@ RSpec.describe Gitlab::HTTPConnectionAdapter do
           end
 
           it 'sets up the connection' do
-            expect(connection.proxy_address).to eq('http://127.0.0.1')
+            expect(connection.proxy_address).to eq('127.0.0.1')
             expect(connection.proxy_port).to eq(1557)
           end
         end
@@ -233,7 +233,7 @@ RSpec.describe Gitlab::HTTPConnectionAdapter do
         end
 
         it 'sets up the connection' do
-          expect(connection.proxy_address).to eq('https://proxy.org')
+          expect(connection.proxy_address).to eq('proxy.org')
           expect(connection.proxy_port).to eq(1557)
         end
       end
@@ -244,7 +244,7 @@ RSpec.describe Gitlab::HTTPConnectionAdapter do
         end
 
         it 'sets up the connection' do
-          expect(connection.proxy_address).to eq('https://proxy.org')
+          expect(connection.proxy_address).to eq('proxy.org')
           expect(connection.proxy_port).to eq(1557)
         end
       end
