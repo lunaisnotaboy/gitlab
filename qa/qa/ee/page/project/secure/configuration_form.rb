@@ -13,10 +13,6 @@ module QA
               element :submit_button
             end
 
-            view 'ee/app/assets/javascripts/security_configuration/components/expandable_section.vue' do
-              element :analyzer_settings_content
-            end
-
             def click_expand_button
               expand_content :analyzer_settings_content
             end

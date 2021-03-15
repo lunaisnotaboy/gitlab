@@ -53,11 +53,7 @@ export default {
       >
     </header>
 
-    <gl-collapse
-      :id="collapseId"
-      v-model="visible"
-      data-testid="content"
-    >
+    <gl-collapse :id="collapseId" v-model="visible" data-testid="content">
       <div class="gl-mt-6"><slot></slot></div>
     </gl-collapse>
   </section>
