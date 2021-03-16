@@ -21,7 +21,7 @@ module QA
         end
 
         def create_merge_request
-          click_element :issuable_create_button, Page::MergeRequest::Show
+          click_element(:issuable_create_button, Page::MergeRequest::Show)
         end
 
         def has_description?(description)
