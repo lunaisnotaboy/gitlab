@@ -14,11 +14,11 @@ module QA
             end
 
             def click_expand_button
-              expand_content :analyzer_settings_content
+              expand_content(:analyzer_settings_content)
             end
 
             def click_submit_button
-              click_element :submit_button
+              click_element(:submit_button)
             end
 
             def click_sast_enable_button
