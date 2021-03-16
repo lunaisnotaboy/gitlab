@@ -115,7 +115,7 @@ module QA
           end
 
           Page::MergeRequest::New.perform do |new_merge_request|
-            new_merge_request.submit_merge_request
+            new_merge_request.create_merge_request
           end
 
           Page::MergeRequest::Show.perform do |merge_request|
