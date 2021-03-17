@@ -22,7 +22,6 @@ RSpec.describe ServiceFieldEntity do
           expected_hash = {
             type: 'text',
             name: 'username',
-            new_title: nil,
             title: 'Username or Email',
             placeholder: 'Use a username for server version and an email for cloud version',
             required: true,
@@ -42,12 +41,11 @@ RSpec.describe ServiceFieldEntity do
           expected_hash = {
             type: 'password',
             name: 'password',
-            new_title: 'password or API token',
-            title: 'Password or API token',
+            title: 'Enter new password or API token',
             placeholder: 'Use a password for server version and an API token for cloud version',
             required: true,
             choices: nil,
-            help: nil,
+            help: 'Leave blank to use your current password or API token',
             value: 'true'
           }
 
@@ -66,7 +64,6 @@ RSpec.describe ServiceFieldEntity do
           expected_hash = {
             type: 'checkbox',
             name: 'send_from_committer_email',
-            new_title: nil,
             title: 'Send from committer',
             placeholder: nil,
             required: nil,
@@ -86,7 +83,6 @@ RSpec.describe ServiceFieldEntity do
           expected_hash = {
             type: 'select',
             name: 'branches_to_be_notified',
-            new_title: nil,
             title: nil,
             placeholder: nil,
             required: nil,

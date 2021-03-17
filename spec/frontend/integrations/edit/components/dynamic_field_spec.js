@@ -8,7 +8,6 @@ describe('DynamicField', () => {
   const defaultProps = {
     help: 'The URL of the project',
     name: 'project_url',
-    newTitle: 'project URL',
     placeholder: 'https://jira.example.com',
     title: 'Project URL',
     type: 'text',
@@ -192,17 +191,6 @@ describe('DynamicField', () => {
         createComponent();
 
         expect(findGlFormGroup().find('label').text()).toBe(defaultProps.title);
-      });
-
-      describe('for password field with some value (hidden by backend)', () => {
-        it('renders label with new password title', () => {
-          createComponent({
-            type: 'password',
-            value: 'true',
-          });
-
-          expect(findGlFormGroup().find('label').text()).toBe(`Enter new ${defaultProps.newTitle}`);
-        });
       });
     });
 

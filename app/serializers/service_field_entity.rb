@@ -4,7 +4,15 @@ class ServiceFieldEntity < Grape::Entity
   include RequestAwareEntity
   include Gitlab::Utils::StrongMemoize
 
-  expose :type, :name, :new_title, :title, :placeholder, :required, :choices
+  expose :type, :name, :placeholder, :required, :choices
+
+  expose :title do |field|
+    non_empty_password?(field) ? field[:non_empty_password_title] : field[:title]
+  end
+
+  expose :help do |field|
+    non_empty_password?(field) ? field[:non_empty_password_help] : field[:help]
+  end
 
   expose :value do |field|
     value = value_for(field)
@@ -16,14 +24,6 @@ class ServiceFieldEntity < Grape::Entity
     else
       value
     end
-  end
-
-  expose :title do |field|
-    non_empty_password?(field) ? field[:non_empty_password_title] : field[:title]
-  end
-
-  expose :help do |field|
-    non_empty_password?(field) ? field[:non_empty_password_help] : field[:help]
   end
 
   private
