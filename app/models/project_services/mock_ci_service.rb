@@ -24,7 +24,7 @@ class MockCiService < CiService
       {
         type: 'text',
         name: 'mock_service_url',
-        title: s_('ProjectService|Mock Service URL'),
+        title: s_('ProjectService|Mock service URL'),
         placeholder: 'http://localhost:4004',
         required: true
       }

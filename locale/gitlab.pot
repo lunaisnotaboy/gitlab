@@ -23842,7 +23842,7 @@ msgstr ""
 msgid "ProjectService|Jenkins URL"
 msgstr ""
 
-msgid "ProjectService|Mock Service URL"
+msgid "ProjectService|Mock service URL"
 msgstr ""
 
 msgid "ProjectService|New issue URL"
