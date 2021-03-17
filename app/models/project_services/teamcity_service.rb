@@ -85,7 +85,9 @@ class TeamcityService < CiService
       },
       {
         type: 'password',
-        name: 'password'
+        name: 'password',
+        non_empty_password_title: s_('ProjectService|Enter new password'),
+        non_empty_password_help: s_('ProjectService|Leave blank to use your current password')
       }
     ]
   end

@@ -151,8 +151,9 @@ class JiraService < IssueTrackerService
       {
         type: 'password',
         name: 'password',
-        new_title: s_('JiraService|password or API token'),
         title: s_('JiraService|Password or API token'),
+        non_empty_password_title: s_('JiraService|Enter new password or API token'),
+        non_empty_password_help: s_('JiraService|Leave blank to use your current password or API token'),
         placeholder: s_('JiraService|Use a password for server version and an API token for cloud version'),
         required: true
       },

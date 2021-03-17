@@ -11674,9 +11674,6 @@ msgstr ""
 msgid "Enter merge request URLs"
 msgstr ""
 
-msgid "Enter new %{field_title}"
-msgstr ""
-
 msgid "Enter new AWS Secret Access Key"
 msgstr ""
 
@@ -17325,6 +17322,9 @@ msgstr ""
 msgid "JiraService|Enable Jira issues creation from vulnerabilities"
 msgstr ""
 
+msgid "JiraService|Enter new password or API token"
+msgstr ""
+
 msgid "JiraService|Events for %{noteable_model_name} are disabled."
 msgstr ""
 
@@ -17371,6 +17371,9 @@ msgid "JiraService|Jira project key"
 msgstr ""
 
 msgid "JiraService|Jira workflow transition IDs"
+msgstr ""
+
+msgid "JiraService|Leave blank to use your current password or API token"
 msgstr ""
 
 msgid "JiraService|Not all data may be displayed here. To view more details or make changes to this issue, go to %{linkStart}Jira%{linkEnd}."
@@ -17428,9 +17431,6 @@ msgid "JiraService|Work on Jira issues without leaving GitLab. Adds a Jira menu 
 msgstr ""
 
 msgid "JiraService|e.g. AB"
-msgstr ""
-
-msgid "JiraService|password or API token"
 msgstr ""
 
 msgid "JiraService|transition ids can have only numbers which can be split with , or ;"
@@ -18081,9 +18081,6 @@ msgid "Leave Admin Mode"
 msgstr ""
 
 msgid "Leave blank for no limit. Once set, existing personal access tokens may be revoked."
-msgstr ""
-
-msgid "Leave blank to use your current %{field}"
 msgstr ""
 
 msgid "Leave edit mode? All unsaved changes will be lost."
@@ -23797,6 +23794,12 @@ msgstr ""
 msgid "ProjectService|Drone URL"
 msgstr ""
 
+msgid "ProjectService|Enter new API key"
+msgstr ""
+
+msgid "ProjectService|Enter new password"
+msgstr ""
+
 msgid "ProjectService|Event will be triggered by a push to the repository"
 msgstr ""
 
@@ -23837,6 +23840,12 @@ msgid "ProjectService|Issue URL"
 msgstr ""
 
 msgid "ProjectService|Jenkins URL"
+msgstr ""
+
+msgid "ProjectService|Leave blank to use your current API key"
+msgstr ""
+
+msgid "ProjectService|Leave blank to use your current password"
 msgstr ""
 
 msgid "ProjectService|Mock service URL"

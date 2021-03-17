@@ -3,7 +3,6 @@
 import { GlFormGroup, GlFormCheckbox, GlFormInput, GlFormSelect, GlFormTextarea } from '@gitlab/ui';
 import { capitalize, lowerCase, isEmpty } from 'lodash';
 import { mapGetters } from 'vuex';
-import { __, sprintf } from '~/locale';
 import eventHub from '../event_hub';
 
 export default {
@@ -29,11 +28,6 @@ export default {
     name: {
       type: String,
       required: true,
-    },
-    newTitle: {
-      type: String,
-      required: false,
-      default: null,
     },
     placeholder: {
       type: String,
@@ -82,24 +76,8 @@ export default {
     isNonEmptyPassword() {
       return this.isPassword && !isEmpty(this.value);
     },
-    label() {
-      if (this.isNonEmptyPassword) {
-        return sprintf(__('Enter new %{field_title}'), {
-          field_title: this.newTitle || this.name,
-        });
-      }
-      return this.humanizedTitle;
-    },
     humanizedTitle() {
       return this.title || capitalize(lowerCase(this.name));
-    },
-    description() {
-      if (this.isNonEmptyPassword) {
-        return sprintf(__('Leave blank to use your current %{field}'), {
-          field: this.newTitle || this.name,
-        });
-      }
-      return this.help;
     },
     passwordRequired() {
       return isEmpty(this.value) && this.required;
@@ -149,13 +127,13 @@ export default {
 
 <template>
   <gl-form-group
-    :label="label"
+    :label="humanizedTitle"
     :label-for="fieldId"
     :invalid-feedback="__('This field is required.')"
     :state="valid"
   >
     <template #description>
-      <span v-html="description"></span>
+      <span v-html="help"></span>
     </template>
 
     <template v-if="isCheckbox">
