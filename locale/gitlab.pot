@@ -12616,9 +12616,6 @@ msgstr ""
 msgid "External URL"
 msgstr ""
 
-msgid "External Wiki"
-msgstr ""
-
 msgid "External authentication"
 msgstr ""
 
@@ -12640,16 +12637,16 @@ msgstr ""
 msgid "ExternalAuthorizationService|When no classification label is set the default label `%{default_label}` will be used."
 msgstr ""
 
-msgid "ExternalWikiService|External Wiki"
+msgid "ExternalWikiService|External wiki"
 msgstr ""
 
-msgid "ExternalWikiService|External Wiki URL"
+msgid "ExternalWikiService|External wiki URL"
 msgstr ""
 
 msgid "ExternalWikiService|Replaces the link to the internal wiki with a link to an external wiki."
 msgstr ""
 
-msgid "ExternalWikiService|The URL of the external Wiki"
+msgid "ExternalWikiService|The URL of the external wiki"
 msgstr ""
 
 msgid "Facebook"
